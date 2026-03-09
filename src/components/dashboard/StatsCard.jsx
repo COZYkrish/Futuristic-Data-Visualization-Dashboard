@@ -1,23 +1,33 @@
 import { motion } from "framer-motion"
 
-export default function StatsCard({title,value}){
+export default function StatsCard({ title, value }) {
 
- return(
+ return (
 
- <motion.div
- initial={{opacity:0,y:20}}
- animate={{opacity:1,y:0}}
- className="bg-white/5 backdrop-blur-xl
- border border-white/10 rounded-xl
- p-6 shadow-lg">
+  <motion.div
+   initial={{ opacity: 0, y: 30 }}
+   animate={{ opacity: 1, y: 0 }}
+   transition={{ duration: 0.5 }}
 
-  <h3 className="text-gray-400">{title}</h3>
+   className="bg-white/5 backdrop-blur-xl
+   border border-white/10
+   rounded-xl
+   p-6
+   shadow-lg
+   hover:shadow-cyan-500/20
+   transition-all
+   duration-300"
+  >
 
-  <p className="text-3xl text-cyan-400 font-bold">
-   {value}
-  </p>
+   <h3 className="text-gray-400 text-sm mb-2">
+    {title}
+   </h3>
 
- </motion.div>
+   <p className="text-3xl font-bold text-cyan-400">
+    {value}
+   </p>
+
+  </motion.div>
 
  )
 

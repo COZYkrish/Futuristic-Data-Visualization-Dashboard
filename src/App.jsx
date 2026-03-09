@@ -7,7 +7,7 @@ function App(){
 
  return(
 
-  <div>
+  <div className="relative">
 
    <ParticleBackground/>
 
@@ -16,7 +16,6 @@ function App(){
    <div className="flex">
 
     <Sidebar/>
-
     <Dashboard/>
 
    </div>
