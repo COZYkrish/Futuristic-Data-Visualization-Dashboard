@@ -1,12 +1,22 @@
 import { BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid } from "recharts"
 
-export default function DataChart({data}){
+export default function DataChart({ data }) {
 
- if(data.length === 0) return null
+ if (data.length === 0) return null
 
- const keys = Object.keys(data[0])
+ const counts = {}
 
- return(
+ data.forEach(item => {
+  const type = item.type
+  counts[type] = (counts[type] || 0) + 1
+ })
+
+ const chartData = Object.keys(counts).map(key => ({
+  name: key,
+  value: counts[key]
+ }))
+
+ return (
 
   <div className="bg-white/5 border border-white/10 p-6 rounded-xl">
 
@@ -14,17 +24,13 @@ export default function DataChart({data}){
     Data Visualization
    </h2>
 
-   <BarChart width={500} height={300} data={data}>
+   <BarChart width={500} height={300} data={chartData}>
 
-    <CartesianGrid strokeDasharray="3 3"/>
-
-    <XAxis dataKey={keys[0]} />
-
-    <YAxis/>
-
-    <Tooltip/>
-
-    <Bar dataKey={keys[1]} fill="#06b6d4"/>
+    <CartesianGrid strokeDasharray="3 3" />
+    <XAxis dataKey="name" />
+    <YAxis />
+    <Tooltip />
+    <Bar dataKey="value" fill="#06b6d4" />
 
    </BarChart>
 
