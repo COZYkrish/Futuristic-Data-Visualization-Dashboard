@@ -2,6 +2,7 @@ import { useState } from "react"
 import StatsCard from "../components/dashboard/StatsCard"
 import DatasetUpload from "../components/upload/DatasetUpload"
 import DataTable from "../components/dashboard/DataTable"
+import DataChart from "../components/dashboard/DataChart"
 import { parseCSV } from "../utils/parseCSV"
 
 export default function Dashboard(){
@@ -46,6 +47,7 @@ export default function Dashboard(){
    {/* Dataset Preview Table */}
 
    <DataTable data={data} />
+   <DataChart data={data}/>
 
   </div>
 
