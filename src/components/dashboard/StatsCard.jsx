@@ -1,4 +1,5 @@
 import { motion } from "framer-motion"
+import CountUp from "react-countup"
 
 export default function StatsCard({ title, value }) {
 
@@ -24,7 +25,12 @@ export default function StatsCard({ title, value }) {
    </h3>
 
    <p className="text-3xl font-bold text-cyan-400">
-    {value}
+
+    <CountUp
+     end={value}
+     duration={1.5}
+    />
+
    </p>
 
   </motion.div>
