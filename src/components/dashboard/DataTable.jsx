@@ -1,40 +1,51 @@
-export default function DataTable({data}){
+import { useState } from "react"
+import StatsCard from "../components/dashboard/StatsCard"
+import DatasetUpload from "../components/upload/DatasetUpload"
+import DataTable from "../components/dashboard/DataTable"
+import { parseCSV } from "../utils/parseCSV"
 
- if(data.length === 0) return null
+export default function Dashboard(){
 
- const columns = Object.keys(data[0])
+ const [data, setData] = useState([])
+
+ const handleUpload = (file) => {
+  parseCSV(file, (parsedData) => {
+   setData(parsedData)
+  })
+ }
 
  return(
 
-  <div className="bg-white/5 border border-white/10 p-6 rounded-xl overflow-auto">
+  <div className="p-8 w-full space-y-8">
 
-   <h2 className="text-cyan-400 mb-4">
-    Dataset Preview
-   </h2>
+   {/* Upload Section */}
 
-   <table className="w-full text-sm text-gray-300">
+   <DatasetUpload onFileUpload={handleUpload} />
 
-    <thead>
-     <tr>
-      {columns.map(col=>(
-       <th key={col} className="p-2 text-left">{col}</th>
-      ))}
-     </tr>
-    </thead>
+   {/* Stats Section */}
 
-    <tbody>
-     {data.slice(0,10).map((row,i)=>(
-      <tr key={i}>
-       {columns.map(col=>(
-        <td key={col} className="p-2">
-         {row[col]}
-        </td>
-       ))}
-      </tr>
-     ))}
-    </tbody>
+   <div className="grid grid-cols-3 gap-6">
 
-   </table>
+    <StatsCard
+     title="Rows"
+     value={data.length}
+    />
+
+    <StatsCard
+     title="Columns"
+     value={data.length > 0 ? Object.keys(data[0]).length : 0}
+    />
+
+    <StatsCard
+     title="Missing Values"
+     value="0"
+    />
+
+   </div>
+
+   {/* Dataset Preview Table */}
+
+   <DataTable data={data} />
 
   </div>
 
