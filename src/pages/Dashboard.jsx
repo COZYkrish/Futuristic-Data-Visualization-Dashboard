@@ -15,6 +15,18 @@ export default function Dashboard(){
   })
  }
 
+ // Dataset statistics
+
+ const rows = data.length
+
+ const columns = data.length > 0 ? Object.keys(data[0]).length : 0
+
+ const missingValues = data.reduce((total, row) => {
+  return total + Object.values(row).filter(
+   value => value === "" || value === null || value === undefined
+  ).length
+ }, 0)
+
  return(
 
   <div className="p-8 w-full space-y-8">
@@ -29,25 +41,28 @@ export default function Dashboard(){
 
     <StatsCard
      title="Rows"
-     value={data.length}
+     value={rows}
     />
 
     <StatsCard
      title="Columns"
-     value={data.length > 0 ? Object.keys(data[0]).length : 0}
+     value={columns}
     />
 
     <StatsCard
      title="Missing Values"
-     value="0"
+     value={missingValues}
     />
 
    </div>
 
-   {/* Dataset Preview Table */}
+   {/* Dataset Preview */}
 
    <DataTable data={data} />
-   <DataChart data={data}/>
+
+   {/* Charts */}
+
+   <DataChart data={data} />
 
   </div>
 
