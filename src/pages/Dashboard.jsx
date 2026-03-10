@@ -1,6 +1,7 @@
 import { useState } from "react"
 import StatsCard from "../components/dashboard/StatsCard"
 import DatasetUpload from "../components/upload/DatasetUpload"
+import DataTable from "../components/dashboard/DataTable"
 import { parseCSV } from "../utils/parseCSV"
 
 export default function Dashboard(){
@@ -19,7 +20,7 @@ export default function Dashboard(){
 
    {/* Upload Section */}
 
-   <DatasetUpload onFileUpload={handleUpload}/>
+   <DatasetUpload onFileUpload={handleUpload} />
 
    {/* Stats Section */}
 
@@ -41,6 +42,10 @@ export default function Dashboard(){
     />
 
    </div>
+
+   {/* Dataset Preview Table */}
+
+   <DataTable data={data} />
 
   </div>
 
