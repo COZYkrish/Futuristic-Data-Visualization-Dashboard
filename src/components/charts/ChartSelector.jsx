@@ -1,16 +1,31 @@
-import { useState } from "react"
+const chartOptions = [
+ { id: "bar", label: "Bar" },
+ { id: "line", label: "Line" },
+ { id: "pie", label: "Pie" },
+ { id: "scatter", label: "Scatter" },
+ { id: "histogram", label: "Histogram" },
+ { id: "3d", label: "3D" }
+]
 
-export default function ChartSelector({ setChartType }) {
+export default function ChartSelector({ chartType, setChartType }) {
 
  return (
-  <div className="flex gap-4 mb-6">
+  <div className="flex flex-wrap gap-3 mb-6">
 
-   <button onClick={()=>setChartType("bar")}>Bar</button>
-   <button onClick={()=>setChartType("line")}>Line</button>
-   <button onClick={()=>setChartType("pie")}>Pie</button>
-   <button onClick={()=>setChartType("scatter")}>Scatter</button>
-   <button onClick={()=>setChartType("histogram")}>Histogram</button>
-   <button onClick={()=>setChartType("3d")}>3D</button>
+   {chartOptions.map((option) => (
+    <button
+     key={option.id}
+     type="button"
+     onClick={() => setChartType(option.id)}
+     className={`rounded-full border px-4 py-2 text-sm font-medium transition ${
+      chartType === option.id
+       ? "border-cyan-400 bg-cyan-400/20 text-cyan-200 shadow-[0_0_20px_rgba(34,211,238,0.18)]"
+       : "border-white/15 bg-white/5 text-gray-300 hover:border-cyan-400/40 hover:text-white"
+     }`}
+    >
+     {option.label}
+    </button>
+   ))}
 
   </div>
  )

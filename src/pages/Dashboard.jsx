@@ -70,11 +70,11 @@ export default function Dashboard(){
 
     {/* Chart Selector */}
 
-    <ChartSelector setChartType={setChartType} />
+    <ChartSelector chartType={chartType} setChartType={setChartType} />
 
     {/* Chart Area */}
 
-    <div className="bg-black/30 rounded-xl p-6">
+    <div className="min-h-[360px] bg-black/30 rounded-xl p-6">
 
      {chartType === "bar" && (
       <BarChartComponent data={data} xKey={xKey} yKey={yKey}/>
