@@ -1,13 +1,23 @@
 import { useState } from "react"
+
 import StatsCard from "../components/dashboard/StatsCard"
 import DatasetUpload from "../components/upload/DatasetUpload"
 import DataTable from "../components/dashboard/DataTable"
-import DataChart from "../components/dashboard/DataChart"
+
+import ChartSelector from "../components/charts/ChartSelector"
+import BarChartComponent from "../components/charts/BarChartComponent"
+import LineChartComponent from "../components/charts/LineChartComponent"
+import PieChartComponent from "../components/charts/PieChartComponent"
+import ScatterChartComponent from "../components/charts/ScatterChartComponent"
+import HistogramChart from "../components/charts/HistogramChart"
+import ThreeDChart from "../components/charts/ThreeDChart"
+
 import { parseCSV } from "../utils/parseCSV"
 
 export default function Dashboard(){
 
  const [data, setData] = useState([])
+ const [chartType, setChartType] = useState("bar")
 
  const handleUpload = (file) => {
   parseCSV(file, (parsedData) => {
@@ -26,6 +36,12 @@ export default function Dashboard(){
    value => value === "" || value === null || value === undefined
   ).length
  }, 0)
+
+ // Get first two columns automatically
+
+ const columnNames = data.length > 0 ? Object.keys(data[0]) : []
+ const xKey = columnNames[0]
+ const yKey = columnNames[1]
 
  return(
 
@@ -60,9 +76,39 @@ export default function Dashboard(){
 
    <DataTable data={data} />
 
-   {/* Charts */}
+   {/* Chart Selector */}
 
-   <DataChart data={data} />
+   <ChartSelector setChartType={setChartType} />
+
+   {/* Chart Container */}
+
+   <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-xl p-6">
+
+    {chartType === "bar" && (
+     <BarChartComponent data={data} xKey={xKey} yKey={yKey}/>
+    )}
+
+    {chartType === "line" && (
+     <LineChartComponent data={data} xKey={xKey} yKey={yKey}/>
+    )}
+
+    {chartType === "pie" && (
+     <PieChartComponent data={data} dataKey={xKey}/>
+    )}
+
+    {chartType === "scatter" && (
+     <ScatterChartComponent data={data} xKey={xKey} yKey={yKey}/>
+    )}
+
+    {chartType === "histogram" && (
+     <HistogramChart data={data} column={xKey}/>
+    )}
+
+    {chartType === "3d" && (
+     <ThreeDChart data={data}/>
+    )}
+
+   </div>
 
   </div>
 
