@@ -25,10 +25,7 @@ export default function Dashboard(){
   })
  }
 
- // Dataset statistics
-
  const rows = data.length
-
  const columns = data.length > 0 ? Object.keys(data[0]).length : 0
 
  const missingValues = data.reduce((total, row) => {
@@ -37,15 +34,13 @@ export default function Dashboard(){
   ).length
  }, 0)
 
- // Get first two columns automatically
-
  const columnNames = data.length > 0 ? Object.keys(data[0]) : []
  const xKey = columnNames[0]
  const yKey = columnNames[1]
 
  return(
 
-  <div className="p-8 w-full space-y-8">
+  <div className="p-8 w-full space-y-10">
 
    {/* Upload Section */}
 
@@ -55,20 +50,9 @@ export default function Dashboard(){
 
    <div className="grid grid-cols-3 gap-6">
 
-    <StatsCard
-     title="Rows"
-     value={rows}
-    />
-
-    <StatsCard
-     title="Columns"
-     value={columns}
-    />
-
-    <StatsCard
-     title="Missing Values"
-     value={missingValues}
-    />
+    <StatsCard title="Rows" value={rows} />
+    <StatsCard title="Columns" value={columns} />
+    <StatsCard title="Missing Values" value={missingValues} />
 
    </div>
 
@@ -76,37 +60,47 @@ export default function Dashboard(){
 
    <DataTable data={data} />
 
-   {/* Chart Selector */}
+   {/* Charts Section */}
 
-   <ChartSelector setChartType={setChartType} />
+   <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-8 shadow-xl space-y-6">
 
-   {/* Chart Container */}
+    <h2 className="text-xl font-semibold text-white">
+     Data Visualization
+    </h2>
 
-   <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-xl p-6">
+    {/* Chart Selector */}
 
-    {chartType === "bar" && (
-     <BarChartComponent data={data} xKey={xKey} yKey={yKey}/>
-    )}
+    <ChartSelector setChartType={setChartType} />
 
-    {chartType === "line" && (
-     <LineChartComponent data={data} xKey={xKey} yKey={yKey}/>
-    )}
+    {/* Chart Area */}
 
-    {chartType === "pie" && (
-     <PieChartComponent data={data} dataKey={xKey}/>
-    )}
+    <div className="bg-black/30 rounded-xl p-6">
 
-    {chartType === "scatter" && (
-     <ScatterChartComponent data={data} xKey={xKey} yKey={yKey}/>
-    )}
+     {chartType === "bar" && (
+      <BarChartComponent data={data} xKey={xKey} yKey={yKey}/>
+     )}
 
-    {chartType === "histogram" && (
-     <HistogramChart data={data} column={xKey}/>
-    )}
+     {chartType === "line" && (
+      <LineChartComponent data={data} xKey={xKey} yKey={yKey}/>
+     )}
 
-    {chartType === "3d" && (
-     <ThreeDChart data={data}/>
-    )}
+     {chartType === "pie" && (
+      <PieChartComponent data={data} dataKey={xKey}/>
+     )}
+
+     {chartType === "scatter" && (
+      <ScatterChartComponent data={data} xKey={xKey} yKey={yKey}/>
+     )}
+
+     {chartType === "histogram" && (
+      <HistogramChart data={data} column={xKey}/>
+     )}
+
+     {chartType === "3d" && (
+      <ThreeDChart data={data}/>
+     )}
+
+    </div>
 
    </div>
 
