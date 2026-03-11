@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 
 import StatsCard from "../components/dashboard/StatsCard"
 import DatasetUpload from "../components/upload/DatasetUpload"
@@ -18,6 +18,8 @@ export default function Dashboard(){
 
  const [data, setData] = useState([])
  const [chartType, setChartType] = useState("bar")
+ const [xKey, setXKey] = useState("")
+ const [yKey, setYKey] = useState("")
 
  const handleUpload = (file) => {
   parseCSV(file, (parsedData) => {
@@ -35,8 +37,32 @@ export default function Dashboard(){
  }, 0)
 
  const columnNames = data.length > 0 ? Object.keys(data[0]) : []
- const xKey = columnNames[0]
- const yKey = columnNames[1]
+ const numericColumnNames = useMemo(() => {
+  return columnNames.filter((column) =>
+   data.some((row) => Number.isFinite(Number(row[column])))
+  )
+ }, [columnNames, data])
+
+ useEffect(() => {
+  if (columnNames.length === 0) {
+   setXKey("")
+   setYKey("")
+   return
+  }
+
+  setXKey((current) => (
+   current && columnNames.includes(current) ? current : columnNames[0]
+  ))
+
+  setYKey((current) => {
+   if (current && numericColumnNames.includes(current)) {
+    return current
+   }
+
+   const fallbackNumeric = numericColumnNames.find((column) => column !== columnNames[0])
+   return fallbackNumeric ?? numericColumnNames[0] ?? columnNames[0]
+  })
+ }, [columnNames, numericColumnNames])
 
  return(
 
@@ -72,6 +98,40 @@ export default function Dashboard(){
 
     <ChartSelector chartType={chartType} setChartType={setChartType} />
 
+    {columnNames.length > 0 && (
+     <div className="grid gap-4 md:grid-cols-2">
+      <label className="space-y-2">
+       <span className="block text-sm font-medium text-gray-300">Category / X Axis</span>
+       <select
+        value={xKey}
+        onChange={(event) => setXKey(event.target.value)}
+        className="w-full rounded-xl border border-white/10 bg-slate-950/80 px-4 py-3 text-sm text-white outline-none transition focus:border-cyan-400"
+       >
+        {columnNames.map((column) => (
+         <option key={column} value={column} className="bg-slate-950">
+          {column}
+         </option>
+        ))}
+       </select>
+      </label>
+
+      <label className="space-y-2">
+       <span className="block text-sm font-medium text-gray-300">Value / Y Axis</span>
+       <select
+        value={yKey}
+        onChange={(event) => setYKey(event.target.value)}
+        className="w-full rounded-xl border border-white/10 bg-slate-950/80 px-4 py-3 text-sm text-white outline-none transition focus:border-cyan-400"
+       >
+        {(numericColumnNames.length > 0 ? numericColumnNames : columnNames).map((column) => (
+         <option key={column} value={column} className="bg-slate-950">
+          {column}
+         </option>
+        ))}
+       </select>
+      </label>
+     </div>
+    )}
+
     {/* Chart Area */}
 
     <div className="min-h-[360px] bg-black/30 rounded-xl p-6">
@@ -85,7 +145,7 @@ export default function Dashboard(){
      )}
 
      {chartType === "pie" && (
-      <PieChartComponent data={data} dataKey={xKey}/>
+      <PieChartComponent data={data} categoryKey={xKey} valueKey={yKey} />
      )}
 
      {chartType === "scatter" && (
@@ -97,7 +157,7 @@ export default function Dashboard(){
      )}
 
      {chartType === "3d" && (
-      <ThreeDChart data={data}/>
+      <ThreeDChart data={data} xKey={xKey} yKey={yKey} />
      )}
 
     </div>
