@@ -12,6 +12,11 @@ import ScatterChartComponent from "../components/charts/ScatterChartComponent"
 import HistogramChart from "../components/charts/HistogramChart"
 import ThreeDChart from "../components/charts/ThreeDChart"
 
+import CorrelationHeatmap from "../components/ai/CorrelationHeatmap"
+import DatasetInsights from "../components/ai/DatasetInsights"
+import OutlierDetection from "../components/ai/OutlierDetection"
+import ChartRecommendation from "../components/ai/ChartRecommendation"
+
 import { parseCSV } from "../utils/parseCSV"
 
 export default function Dashboard(){
@@ -37,6 +42,7 @@ export default function Dashboard(){
  }, 0)
 
  const columnNames = data.length > 0 ? Object.keys(data[0]) : []
+
  const numericColumnNames = useMemo(() => {
   return columnNames.filter((column) =>
    data.some((row) => Number.isFinite(Number(row[column])))
@@ -44,6 +50,7 @@ export default function Dashboard(){
  }, [columnNames, data])
 
  useEffect(() => {
+
   if (columnNames.length === 0) {
    setXKey("")
    setYKey("")
@@ -55,13 +62,18 @@ export default function Dashboard(){
   ))
 
   setYKey((current) => {
+
    if (current && numericColumnNames.includes(current)) {
     return current
    }
 
-   const fallbackNumeric = numericColumnNames.find((column) => column !== columnNames[0])
+   const fallbackNumeric =
+    numericColumnNames.find((column) => column !== columnNames[0])
+
    return fallbackNumeric ?? numericColumnNames[0] ?? columnNames[0]
+
   })
+
  }, [columnNames, numericColumnNames])
 
  return(
@@ -94,41 +106,57 @@ export default function Dashboard(){
      Data Visualization
     </h2>
 
-    {/* Chart Selector */}
-
     <ChartSelector chartType={chartType} setChartType={setChartType} />
 
     {columnNames.length > 0 && (
      <div className="grid gap-4 md:grid-cols-2">
+
       <label className="space-y-2">
-       <span className="block text-sm font-medium text-gray-300">Category / X Axis</span>
+       <span className="block text-sm font-medium text-gray-300">
+        Category / X Axis
+       </span>
+
        <select
         value={xKey}
         onChange={(event) => setXKey(event.target.value)}
         className="w-full rounded-xl border border-white/10 bg-slate-950/80 px-4 py-3 text-sm text-white outline-none transition focus:border-cyan-400"
        >
+
         {columnNames.map((column) => (
          <option key={column} value={column} className="bg-slate-950">
           {column}
          </option>
         ))}
+
        </select>
       </label>
 
       <label className="space-y-2">
-       <span className="block text-sm font-medium text-gray-300">Value / Y Axis</span>
+
+       <span className="block text-sm font-medium text-gray-300">
+        Value / Y Axis
+       </span>
+
        <select
         value={yKey}
         onChange={(event) => setYKey(event.target.value)}
         className="w-full rounded-xl border border-white/10 bg-slate-950/80 px-4 py-3 text-sm text-white outline-none transition focus:border-cyan-400"
        >
-        {(numericColumnNames.length > 0 ? numericColumnNames : columnNames).map((column) => (
+
+        {(numericColumnNames.length > 0
+         ? numericColumnNames
+         : columnNames).map((column) => (
+
          <option key={column} value={column} className="bg-slate-950">
           {column}
          </option>
+
         ))}
+
        </select>
+
       </label>
+
      </div>
     )}
 
@@ -145,7 +173,7 @@ export default function Dashboard(){
      )}
 
      {chartType === "pie" && (
-      <PieChartComponent data={data} categoryKey={xKey} valueKey={yKey} />
+      <PieChartComponent data={data} categoryKey={xKey} valueKey={yKey}/>
      )}
 
      {chartType === "scatter" && (
@@ -157,12 +185,31 @@ export default function Dashboard(){
      )}
 
      {chartType === "3d" && (
-      <ThreeDChart data={data} xKey={xKey} yKey={yKey} />
+      <ThreeDChart data={data} xKey={xKey} yKey={yKey}/>
      )}
 
     </div>
 
    </div>
+
+
+   {/* AI Analytics Section */}
+
+   {data.length > 0 && (
+
+    <div className="space-y-8">
+
+     <DatasetInsights data={data} />
+
+     <ChartRecommendation data={data} />
+
+     <OutlierDetection data={data} />
+
+     <CorrelationHeatmap data={data} />
+
+    </div>
+
+   )}
 
   </div>
 
