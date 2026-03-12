@@ -27,7 +27,12 @@ export default function LineChartComponent({ data, xKey, yKey }) {
 
  return (
   <ResponsiveContainer width="100%" height={340}>
-   <LineChart data={data} margin={{ top: 16, right: 20, left: 0, bottom: 12 }}>
+   <LineChart
+    data={data}
+    margin={{ top: 16, right: 20, left: 0, bottom: 12 }}
+    onMouseMove={(state) => setActiveDotIndex(state?.activeTooltipIndex ?? null)}
+    onMouseLeave={() => setActiveDotIndex(null)}
+   >
     <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
     <XAxis dataKey={xKey} tick={{ fill: "#cbd5e1", fontSize: 11 }} interval={0} angle={-18} textAnchor="end" height={56} />
     <YAxis tick={{ fill: "#cbd5e1", fontSize: 11 }} />
@@ -44,8 +49,6 @@ export default function LineChartComponent({ data, xKey, yKey }) {
      strokeWidth={3}
      dot={{ r: 3, fill: "#10b981" }}
      activeDot={{ r: 6, fill: "#86efac" }}
-     onMouseMove={(_, index) => setActiveDotIndex(index)}
-     onMouseLeave={() => setActiveDotIndex(null)}
     />
     {activeDotIndex !== null && (
      <ReferenceLine
