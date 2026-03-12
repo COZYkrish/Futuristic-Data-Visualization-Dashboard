@@ -18,6 +18,70 @@ import OutlierDetection from "../components/ai/OutlierDetection"
 import ChartRecommendation from "../components/ai/ChartRecommendation"
 
 import { parseCSV } from "../utils/parseCSV"
+import { buildColumnProfiles, toNumericOrNull } from "../utils/dataProfiling"
+
+function aggregateChartData(data, xKey, yKey, aggregation, sortMode, topN) {
+ if (!xKey || !yKey || !data.length) return []
+
+ const grouped = data.reduce((accumulator, row) => {
+  const category = String(row[xKey] ?? "Unknown")
+  const numeric = toNumericOrNull(row[yKey])
+
+  if (!accumulator[category]) {
+   accumulator[category] = {
+    [xKey]: category,
+    value: 0,
+    count: 0,
+    min: Number.POSITIVE_INFINITY,
+    max: Number.NEGATIVE_INFINITY
+   }
+  }
+
+  const entry = accumulator[category]
+
+  if (numeric !== null) {
+   entry.value += numeric
+   entry.count += 1
+   entry.min = Math.min(entry.min, numeric)
+   entry.max = Math.max(entry.max, numeric)
+  } else if (aggregation === "count") {
+   entry.count += 1
+  }
+
+  return accumulator
+ }, {})
+
+ const result = Object.values(grouped).map((entry) => {
+  let computed = entry.value
+
+  if (aggregation === "avg") {
+   computed = entry.count ? entry.value / entry.count : 0
+  }
+
+  if (aggregation === "count") {
+   computed = entry.count
+  }
+
+  if (aggregation === "min") {
+   computed = Number.isFinite(entry.min) ? entry.min : 0
+  }
+
+  if (aggregation === "max") {
+   computed = Number.isFinite(entry.max) ? entry.max : 0
+  }
+
+  return {
+   [xKey]: entry[xKey],
+   [yKey]: Number(computed.toFixed(4))
+  }
+ })
+
+ const sorted = [...result].sort((left, right) =>
+  sortMode === "asc" ? left[yKey] - right[yKey] : right[yKey] - left[yKey]
+ )
+
+ return sorted.slice(0, topN)
+}
 
 export default function Dashboard(){
 
@@ -25,6 +89,9 @@ export default function Dashboard(){
  const [chartType, setChartType] = useState("bar")
  const [xKey, setXKey] = useState("")
  const [yKey, setYKey] = useState("")
+ const [aggregation, setAggregation] = useState("sum")
+ const [sortMode, setSortMode] = useState("desc")
+ const [topN, setTopN] = useState(12)
 
  const handleUpload = (file) => {
   parseCSV(file, (parsedData) => {
@@ -41,13 +108,21 @@ export default function Dashboard(){
   ).length
  }, 0)
 
- const columnNames = data.length > 0 ? Object.keys(data[0]) : []
+ const profile = useMemo(() => buildColumnProfiles(data), [data])
+ const columnNames = profile.columns
+ const numericColumnNames = profile.numericColumns
 
- const numericColumnNames = useMemo(() => {
-  return columnNames.filter((column) =>
-   data.some((row) => Number.isFinite(Number(row[column])))
-  )
- }, [columnNames, data])
+ const xOptions = useMemo(() => {
+  if (chartType === "scatter" || chartType === "histogram") {
+   return numericColumnNames.length ? numericColumnNames : columnNames
+  }
+  return columnNames
+ }, [chartType, columnNames, numericColumnNames])
+
+ const yOptions = useMemo(() => {
+  if (chartType === "histogram") return []
+  return numericColumnNames.length ? numericColumnNames : columnNames
+ }, [chartType, columnNames, numericColumnNames])
 
  useEffect(() => {
 
@@ -58,23 +133,32 @@ export default function Dashboard(){
   }
 
   setXKey((current) => (
-   current && columnNames.includes(current) ? current : columnNames[0]
+   current && xOptions.includes(current) ? current : xOptions[0]
   ))
 
   setYKey((current) => {
+   if (chartType === "histogram") {
+    return ""
+   }
 
-   if (current && numericColumnNames.includes(current)) {
+   if (current && yOptions.includes(current)) {
     return current
    }
 
-   const fallbackNumeric =
-    numericColumnNames.find((column) => column !== columnNames[0])
-
-   return fallbackNumeric ?? numericColumnNames[0] ?? columnNames[0]
+   const fallbackNumeric = yOptions.find((column) => column !== xOptions[0])
+   return fallbackNumeric ?? yOptions[0] ?? ""
 
   })
 
- }, [columnNames, numericColumnNames])
+ }, [chartType, columnNames, xOptions, yOptions])
+
+ const transformedData = useMemo(() => {
+  if (chartType === "bar" || chartType === "line" || chartType === "pie") {
+   return aggregateChartData(data, xKey, yKey, aggregation, sortMode, topN)
+  }
+
+  return data
+ }, [aggregation, chartType, data, sortMode, topN, xKey, yKey])
 
  return(
 
@@ -122,7 +206,7 @@ export default function Dashboard(){
         className="w-full rounded-xl border border-white/10 bg-slate-950/80 px-4 py-3 text-sm text-white outline-none transition focus:border-cyan-400"
        >
 
-        {columnNames.map((column) => (
+        {xOptions.map((column) => (
          <option key={column} value={column} className="bg-slate-950">
           {column}
          </option>
@@ -131,32 +215,85 @@ export default function Dashboard(){
        </select>
       </label>
 
-      <label className="space-y-2">
+      {chartType !== "histogram" && (
+       <label className="space-y-2">
 
-       <span className="block text-sm font-medium text-gray-300">
-        Value / Y Axis
-       </span>
+        <span className="block text-sm font-medium text-gray-300">
+         Value / Y Axis
+        </span>
 
-       <select
-        value={yKey}
-        onChange={(event) => setYKey(event.target.value)}
-        className="w-full rounded-xl border border-white/10 bg-slate-950/80 px-4 py-3 text-sm text-white outline-none transition focus:border-cyan-400"
-       >
+        <select
+         value={yKey}
+         onChange={(event) => setYKey(event.target.value)}
+         className="w-full rounded-xl border border-white/10 bg-slate-950/80 px-4 py-3 text-sm text-white outline-none transition focus:border-cyan-400"
+        >
 
-        {(numericColumnNames.length > 0
-         ? numericColumnNames
-         : columnNames).map((column) => (
+         {yOptions.map((column) => (
 
-         <option key={column} value={column} className="bg-slate-950">
-          {column}
-         </option>
+          <option key={column} value={column} className="bg-slate-950">
+           {column}
+          </option>
 
-        ))}
+         ))}
 
-       </select>
+        </select>
 
-      </label>
+       </label>
+      )}
 
+      {(chartType === "bar" || chartType === "line" || chartType === "pie") && (
+       <>
+        <label className="space-y-2">
+         <span className="block text-sm font-medium text-gray-300">
+          Aggregation
+         </span>
+         <select
+          value={aggregation}
+          onChange={(event) => setAggregation(event.target.value)}
+          className="w-full rounded-xl border border-white/10 bg-slate-950/80 px-4 py-3 text-sm text-white outline-none transition focus:border-cyan-400"
+         >
+          <option value="sum" className="bg-slate-950">Sum</option>
+          <option value="avg" className="bg-slate-950">Average</option>
+          <option value="count" className="bg-slate-950">Count</option>
+          <option value="min" className="bg-slate-950">Minimum</option>
+          <option value="max" className="bg-slate-950">Maximum</option>
+         </select>
+        </label>
+
+        <label className="space-y-2">
+         <span className="block text-sm font-medium text-gray-300">
+          Sort
+         </span>
+         <select
+          value={sortMode}
+          onChange={(event) => setSortMode(event.target.value)}
+          className="w-full rounded-xl border border-white/10 bg-slate-950/80 px-4 py-3 text-sm text-white outline-none transition focus:border-cyan-400"
+         >
+          <option value="desc" className="bg-slate-950">Highest First</option>
+          <option value="asc" className="bg-slate-950">Lowest First</option>
+         </select>
+        </label>
+       </>
+      )}
+
+     </div>
+    )}
+
+    {(chartType === "bar" || chartType === "line" || chartType === "pie") && (
+     <div className="space-y-2">
+      <div className="flex items-center justify-between text-xs text-slate-300">
+       <span>Top Categories</span>
+       <span>{topN}</span>
+      </div>
+      <input
+       type="range"
+       min="5"
+       max="50"
+       step="1"
+       value={topN}
+       onChange={(event) => setTopN(Number(event.target.value))}
+       className="h-2 w-full cursor-pointer appearance-none rounded-lg bg-white/10 accent-cyan-400"
+      />
      </div>
     )}
 
@@ -165,15 +302,15 @@ export default function Dashboard(){
     <div className="min-h-[360px] bg-black/30 rounded-xl p-6">
 
      {chartType === "bar" && (
-      <BarChartComponent data={data} xKey={xKey} yKey={yKey}/>
+      <BarChartComponent data={transformedData} xKey={xKey} yKey={yKey}/>
      )}
 
      {chartType === "line" && (
-      <LineChartComponent data={data} xKey={xKey} yKey={yKey}/>
+      <LineChartComponent data={transformedData} xKey={xKey} yKey={yKey}/>
      )}
 
      {chartType === "pie" && (
-      <PieChartComponent data={data} categoryKey={xKey} valueKey={yKey}/>
+      <PieChartComponent data={transformedData} categoryKey={xKey} valueKey={yKey}/>
      )}
 
      {chartType === "scatter" && (
