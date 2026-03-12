@@ -14,6 +14,7 @@
     "@react-three/fiber": "^9.5.0",
     "axios": "^1.13.6",
     "framer-motion": "^12.35.2",
+    "ml-matrix": "^6.12.1",
     "papaparse": "^5.5.3",
     "react": "^19.2.0",
     "react-countup": "^6.5.3",
