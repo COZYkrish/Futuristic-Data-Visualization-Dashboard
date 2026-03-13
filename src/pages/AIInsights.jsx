@@ -96,15 +96,15 @@ export default function AIInsights({ data, datasetName, uploadError }) {
  }, [data.length, overview.columns, overview.numeric, overview.rows])
 
  return (
-  <div className="w-full p-8">
+  <div className="w-full p-4 sm:p-6 lg:p-8">
    <div className="space-y-8">
-    <section className="relative overflow-hidden rounded-[30px] border border-cyan-400/20 bg-[radial-gradient(circle_at_top_left,_rgba(34,211,238,0.18),_transparent_24%),radial-gradient(circle_at_bottom_right,_rgba(59,130,246,0.15),_transparent_30%),linear-gradient(135deg,_rgba(15,23,42,0.96),_rgba(2,6,23,0.98))] p-8 shadow-[0_0_80px_rgba(34,211,238,0.08)]">
+    <section className="relative overflow-hidden rounded-[24px] border border-cyan-400/20 bg-[radial-gradient(circle_at_top_left,_rgba(34,211,238,0.18),_transparent_24%),radial-gradient(circle_at_bottom_right,_rgba(59,130,246,0.15),_transparent_30%),linear-gradient(135deg,_rgba(15,23,42,0.96),_rgba(2,6,23,0.98))] p-5 shadow-[0_0_80px_rgba(34,211,238,0.08)] sm:rounded-[30px] sm:p-8">
      <div className="relative z-10 grid gap-8 xl:grid-cols-[1.35fr_0.9fr]">
       <div className="space-y-4">
        <span className="inline-flex rounded-full border border-cyan-400/25 bg-cyan-400/10 px-3 py-1 text-xs uppercase tracking-[0.32em] text-cyan-200">
         AI Observatory
        </span>
-       <h1 className="max-w-3xl text-4xl font-semibold tracking-tight text-white">
+       <h1 className="max-w-3xl text-3xl font-semibold tracking-tight text-white sm:text-4xl">
         Dedicated intelligence layer for your uploaded dataset
        </h1>
        <p className="max-w-2xl text-sm leading-7 text-slate-300">
@@ -112,7 +112,7 @@ export default function AIInsights({ data, datasetName, uploadError }) {
         structure in one focused analysis workspace with the same shared dataset state.
        </p>
 
-       <div className="grid gap-4 md:grid-cols-4">
+       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <InsightMetric label="Dataset" value={datasetName || "Waiting"} accent="text-cyan-200" />
         <InsightMetric label="Rows" value={overview.rows} accent="text-white" />
         <InsightMetric label="Numeric" value={overview.numeric} accent="text-emerald-300" />
@@ -120,7 +120,7 @@ export default function AIInsights({ data, datasetName, uploadError }) {
        </div>
       </div>
 
-      <div className="rounded-[26px] border border-white/10 bg-black/30 p-6 backdrop-blur-xl">
+      <div className="rounded-[22px] border border-white/10 bg-black/30 p-5 backdrop-blur-xl sm:rounded-[26px] sm:p-6">
        <p className="text-xs uppercase tracking-[0.28em] text-cyan-200/80">
         Analysis Status
        </p>

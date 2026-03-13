@@ -56,13 +56,13 @@ function App() {
 
  return (
 
-  <div className="relative">
+  <div className="relative min-h-screen overflow-x-hidden">
 
    <ParticleBackground/>
 
    <Navbar/>
 
-   <div className="flex">
+   <div className="flex flex-col lg:flex-row">
 
     <Sidebar activeItem={activeItem} onNavigate={handleNavigate} />
 

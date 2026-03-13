@@ -37,7 +37,7 @@ export default function Dashboard({
 
  return (
 
-  <div id="dashboard" className="p-8 w-full space-y-10">
+  <div id="dashboard" className="w-full space-y-8 p-4 sm:p-6 lg:p-8">
 
    {/* Upload Section */}
 
@@ -54,7 +54,7 @@ export default function Dashboard({
 
    {/* Stats Section */}
 
-   <div className="grid grid-cols-3 gap-6">
+   <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
 
     <StatsCard title="Rows" value={rows} />
     <StatsCard title="Columns" value={columns} />
@@ -66,14 +66,14 @@ export default function Dashboard({
 
    <DataTable data={data} />
 
-   <section className="rounded-[28px] border border-cyan-400/15 bg-gradient-to-br from-cyan-500/10 via-slate-950/80 to-fuchsia-500/10 p-8 shadow-[0_0_60px_rgba(34,211,238,0.08)]">
+   <section className="rounded-[24px] border border-cyan-400/15 bg-gradient-to-br from-cyan-500/10 via-slate-950/80 to-fuchsia-500/10 p-5 shadow-[0_0_60px_rgba(34,211,238,0.08)] sm:rounded-[28px] sm:p-8">
     <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
      <div className="max-w-2xl space-y-4">
       <span className="inline-flex rounded-full border border-cyan-400/20 bg-cyan-400/10 px-3 py-1 text-xs uppercase tracking-[0.3em] text-cyan-200">
        Visualization Deck
       </span>
       <div className="space-y-3">
-       <h2 className="text-3xl font-semibold text-white">
+       <h2 className="text-2xl font-semibold text-white sm:text-3xl">
         Launch a dedicated charts workspace for deeper exploration
        </h2>
        <p className="text-sm leading-7 text-slate-300">
@@ -86,7 +86,7 @@ export default function Dashboard({
      <button
       type="button"
       onClick={onChartsNavigate}
-      className="inline-flex w-fit items-center justify-center rounded-2xl border border-cyan-300/40 bg-cyan-400/15 px-5 py-3 text-sm font-medium text-cyan-100 transition hover:border-cyan-200 hover:bg-cyan-400/25"
+      className="inline-flex w-full items-center justify-center rounded-2xl border border-cyan-300/40 bg-cyan-400/15 px-5 py-3 text-sm font-medium text-cyan-100 transition hover:border-cyan-200 hover:bg-cyan-400/25 lg:w-fit"
      >
       Open Charts Page
      </button>
@@ -95,7 +95,7 @@ export default function Dashboard({
 
    <section
     id="ai-insights"
-    className="rounded-[28px] border border-fuchsia-400/15 bg-[radial-gradient(circle_at_top_right,_rgba(217,70,239,0.16),_transparent_26%),linear-gradient(135deg,_rgba(17,24,39,0.94),_rgba(2,6,23,0.98))] p-8 shadow-[0_0_60px_rgba(217,70,239,0.08)]"
+    className="rounded-[24px] border border-fuchsia-400/15 bg-[radial-gradient(circle_at_top_right,_rgba(217,70,239,0.16),_transparent_26%),linear-gradient(135deg,_rgba(17,24,39,0.94),_rgba(2,6,23,0.98))] p-5 shadow-[0_0_60px_rgba(217,70,239,0.08)] sm:rounded-[28px] sm:p-8"
    >
     <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
      <div className="max-w-2xl space-y-4">
@@ -103,7 +103,7 @@ export default function Dashboard({
        AI Observatory
       </span>
       <div className="space-y-3">
-       <h2 className="text-3xl font-semibold text-white">
+       <h2 className="text-2xl font-semibold text-white sm:text-3xl">
         Review intelligent dataset diagnostics on a focused page
        </h2>
        <p className="text-sm leading-7 text-slate-300">
@@ -116,7 +116,7 @@ export default function Dashboard({
      <button
       type="button"
       onClick={onAIInsightsNavigate}
-      className="inline-flex w-fit items-center justify-center rounded-2xl border border-fuchsia-300/40 bg-fuchsia-400/15 px-5 py-3 text-sm font-medium text-fuchsia-100 transition hover:border-fuchsia-200 hover:bg-fuchsia-400/25"
+      className="inline-flex w-full items-center justify-center rounded-2xl border border-fuchsia-300/40 bg-fuchsia-400/15 px-5 py-3 text-sm font-medium text-fuchsia-100 transition hover:border-fuchsia-200 hover:bg-fuchsia-400/25 lg:w-fit"
      >
       Open AI Insights
      </button>

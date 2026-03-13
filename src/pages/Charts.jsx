@@ -121,16 +121,16 @@ export default function Charts({ data, datasetName, uploadError }) {
  }
 
  return (
-  <div className="w-full p-8">
+  <div className="w-full p-4 sm:p-6 lg:p-8">
    <div className="space-y-8">
-    <section className="relative overflow-hidden rounded-[30px] border border-cyan-400/20 bg-[radial-gradient(circle_at_top_left,_rgba(34,211,238,0.2),_transparent_28%),radial-gradient(circle_at_bottom_right,_rgba(217,70,239,0.18),_transparent_30%),linear-gradient(135deg,_rgba(15,23,42,0.95),_rgba(2,6,23,0.96))] p-8 shadow-[0_0_80px_rgba(56,189,248,0.08)]">
+    <section className="relative overflow-hidden rounded-[24px] border border-cyan-400/20 bg-[radial-gradient(circle_at_top_left,_rgba(34,211,238,0.2),_transparent_28%),radial-gradient(circle_at_bottom_right,_rgba(217,70,239,0.18),_transparent_30%),linear-gradient(135deg,_rgba(15,23,42,0.95),_rgba(2,6,23,0.96))] p-5 shadow-[0_0_80px_rgba(56,189,248,0.08)] sm:rounded-[30px] sm:p-8">
      <div className="relative z-10 grid gap-8 xl:grid-cols-[1.4fr_0.9fr]">
       <div className="space-y-6">
        <div className="space-y-3">
         <span className="inline-flex rounded-full border border-cyan-400/25 bg-cyan-400/10 px-3 py-1 text-xs uppercase tracking-[0.32em] text-cyan-200">
          Charts Lab
         </span>
-        <h1 className="max-w-3xl text-4xl font-semibold tracking-tight text-white">
+        <h1 className="max-w-3xl text-3xl font-semibold tracking-tight text-white sm:text-4xl">
          Futuristic chart workspace for live dataset exploration
         </h1>
         <p className="max-w-2xl text-sm leading-7 text-slate-300">
@@ -139,14 +139,14 @@ export default function Charts({ data, datasetName, uploadError }) {
         </p>
        </div>
 
-       <div className="grid gap-4 md:grid-cols-3">
+       <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3">
         <InsightPill label="Dataset" value={datasetName || "Waiting"} />
         <InsightPill label="Numeric Signals" value={chartSummary.signalCount} />
         <InsightPill label="Dimensions" value={chartSummary.dimensionCount} />
        </div>
       </div>
 
-      <div className="rounded-[26px] border border-white/10 bg-black/30 p-6 backdrop-blur-xl">
+      <div className="rounded-[22px] border border-white/10 bg-black/30 p-5 backdrop-blur-xl sm:rounded-[26px] sm:p-6">
        <p className="text-xs uppercase tracking-[0.28em] text-cyan-200/80">
         Active Render
        </p>
@@ -175,12 +175,12 @@ export default function Charts({ data, datasetName, uploadError }) {
     </section>
 
     <section className="grid gap-8 xl:grid-cols-[340px_minmax(0,1fr)]">
-     <aside className="space-y-6 rounded-[28px] border border-white/10 bg-white/5 p-6 backdrop-blur-xl">
+     <aside className="space-y-6 rounded-[22px] border border-white/10 bg-white/5 p-5 backdrop-blur-xl sm:rounded-[28px] sm:p-6">
       <div className="space-y-2">
        <p className="text-xs uppercase tracking-[0.3em] text-cyan-200/80">
         Control Matrix
        </p>
-       <h2 className="text-2xl font-semibold text-white">
+       <h2 className="text-xl font-semibold text-white sm:text-2xl">
         Configure the render pipeline
        </h2>
       </div>
@@ -278,13 +278,13 @@ export default function Charts({ data, datasetName, uploadError }) {
      </aside>
 
      <div className="space-y-6">
-      <section className="rounded-[28px] border border-white/10 bg-white/5 p-6 shadow-[0_0_40px_rgba(15,23,42,0.35)] backdrop-blur-xl">
+      <section className="rounded-[22px] border border-white/10 bg-white/5 p-4 shadow-[0_0_40px_rgba(15,23,42,0.35)] backdrop-blur-xl sm:rounded-[28px] sm:p-6">
        <div className="mb-5 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
         <div>
          <p className="text-xs uppercase tracking-[0.3em] text-slate-500">
           Render Output
          </p>
-         <h2 className="mt-2 text-2xl font-semibold text-white">
+         <h2 className="mt-2 text-xl font-semibold text-white sm:text-2xl">
           {chartType.toUpperCase()} visual
          </h2>
         </div>
@@ -295,7 +295,7 @@ export default function Charts({ data, datasetName, uploadError }) {
         </p>
        </div>
 
-       <div className="min-h-[420px] rounded-[24px] border border-cyan-400/10 bg-[linear-gradient(180deg,rgba(2,6,23,0.96),rgba(15,23,42,0.82))] p-6">
+       <div className="min-h-[320px] rounded-[20px] border border-cyan-400/10 bg-[linear-gradient(180deg,rgba(2,6,23,0.96),rgba(15,23,42,0.82))] p-3 sm:min-h-[420px] sm:rounded-[24px] sm:p-6">
         {renderChart()}
        </div>
       </section>
