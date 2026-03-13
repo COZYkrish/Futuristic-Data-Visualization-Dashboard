@@ -83,7 +83,7 @@ function aggregateChartData(data, xKey, yKey, aggregation, sortMode, topN) {
  return sorted.slice(0, topN)
 }
 
-export default function Dashboard(){
+export default function Dashboard() {
 
  const [data, setData] = useState([])
  const [datasetName, setDatasetName] = useState("")
@@ -177,20 +177,22 @@ export default function Dashboard(){
   return data
  }, [aggregation, chartType, data, sortMode, topN, xKey, yKey])
 
- return(
+ return (
 
-  <div className="p-8 w-full space-y-10">
+  <div id="dashboard" className="p-8 w-full space-y-10">
 
    {/* Upload Section */}
 
-   <DatasetUpload
-    onFileUpload={handleUpload}
-    fileName={datasetName}
-    error={uploadError}
-    isUploading={isUploading}
-    rows={rows}
-    columns={columns}
-   />
+   <section id="upload-dataset">
+    <DatasetUpload
+     onFileUpload={handleUpload}
+     fileName={datasetName}
+     error={uploadError}
+     isUploading={isUploading}
+     rows={rows}
+     columns={columns}
+    />
+   </section>
 
    {/* Stats Section */}
 
@@ -208,7 +210,10 @@ export default function Dashboard(){
 
    {/* Charts Section */}
 
-   <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-8 shadow-xl space-y-6">
+   <section
+    id="charts"
+    className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-8 shadow-xl space-y-6"
+   >
 
     <h2 className="text-xl font-semibold text-white">
      Data Visualization
@@ -351,14 +356,14 @@ export default function Dashboard(){
 
     </div>
 
-   </div>
+   </section>
 
 
    {/* AI Analytics Section */}
 
    {data.length > 0 && (
 
-    <div className="space-y-8">
+    <div id="ai-insights" className="space-y-8">
 
      <DatasetInsights data={data} />
 
