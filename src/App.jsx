@@ -4,6 +4,7 @@ import Navbar from "./components/layout/Navbar"
 import Sidebar from "./components/layout/Sidebar"
 import Dashboard from "./pages/Dashboard"
 import Charts from "./pages/Charts"
+import AIInsights from "./pages/AIInsights"
 import ParticleBackground from "./components/ui/ParticleBackground"
 import { parseCSV } from "./utils/parseCSV"
 
@@ -44,6 +45,11 @@ function App() {
    return
   }
 
+  if (itemId === "ai-insights") {
+   setCurrentPage("ai-insights")
+   return
+  }
+
   setCurrentPage("dashboard")
   setDashboardTarget(itemId === "dashboard" ? "top" : itemId)
  }
@@ -66,6 +72,12 @@ function App() {
       datasetName={datasetName}
       uploadError={uploadError}
      />
+    ) : currentPage === "ai-insights" ? (
+     <AIInsights
+      data={data}
+      datasetName={datasetName}
+      uploadError={uploadError}
+     />
     ) : (
      <Dashboard
       data={data}
@@ -75,6 +87,7 @@ function App() {
       onFileUpload={handleUpload}
       focusTarget={dashboardTarget}
       onChartsNavigate={() => handleNavigate("charts")}
+      onAIInsightsNavigate={() => handleNavigate("ai-insights")}
      />
     )}
 
