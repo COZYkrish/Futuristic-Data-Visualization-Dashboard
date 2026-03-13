@@ -5,7 +5,7 @@ const navItems = [
  { id: "ai-insights", label: "AI Insights" }
 ]
 
-export default function Sidebar({ activeSection, onNavigate }) {
+export default function Sidebar({ activeItem, onNavigate }) {
 
  return (
 
@@ -20,7 +20,7 @@ export default function Sidebar({ activeSection, onNavigate }) {
       type="button"
       onClick={() => onNavigate(item.id)}
       className={`block text-left transition ${
-       activeSection === item.id
+       activeItem === item.id
         ? "text-cyan-400 hover:text-cyan-300"
         : "text-gray-300 hover:text-white"
       }`}

@@ -1,52 +1,51 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 
 import Navbar from "./components/layout/Navbar"
 import Sidebar from "./components/layout/Sidebar"
 import Dashboard from "./pages/Dashboard"
+import Charts from "./pages/Charts"
 import ParticleBackground from "./components/ui/ParticleBackground"
-
-const sectionIds = ["dashboard", "upload-dataset", "charts", "ai-insights"]
+import { parseCSV } from "./utils/parseCSV"
 
 function App() {
- const [activeSection, setActiveSection] = useState("dashboard")
+ const [activeItem, setActiveItem] = useState("dashboard")
+ const [currentPage, setCurrentPage] = useState("dashboard")
+ const [dashboardTarget, setDashboardTarget] = useState("top")
+ const [data, setData] = useState([])
+ const [datasetName, setDatasetName] = useState("")
+ const [uploadError, setUploadError] = useState("")
+ const [isUploading, setIsUploading] = useState(false)
 
- useEffect(() => {
-  const sections = sectionIds
-   .map((id) => document.getElementById(id))
-   .filter(Boolean)
+ const handleUpload = (file) => {
+  setIsUploading(true)
+  setUploadError("")
 
-  if (!sections.length) return undefined
-
-  const observer = new IntersectionObserver(
-   (entries) => {
-    const visibleEntries = entries
-     .filter((entry) => entry.isIntersecting)
-     .sort((left, right) => right.intersectionRatio - left.intersectionRatio)
-
-    if (visibleEntries.length > 0) {
-     setActiveSection(visibleEntries[0].target.id)
-    }
+  parseCSV(
+   file,
+   (parsedData) => {
+    setData(parsedData)
+    setDatasetName(file.name)
+    setIsUploading(false)
    },
-   {
-    rootMargin: "-20% 0px -55% 0px",
-    threshold: [0.2, 0.4, 0.6]
+   (message) => {
+    setData([])
+    setDatasetName("")
+    setUploadError(message)
+    setIsUploading(false)
    }
   )
+ }
 
-  sections.forEach((section) => observer.observe(section))
+ const handleNavigate = (itemId) => {
+  setActiveItem(itemId)
 
-  return () => observer.disconnect()
- }, [])
+  if (itemId === "charts") {
+   setCurrentPage("charts")
+   return
+  }
 
- const handleNavigate = (sectionId) => {
-  const target = document.getElementById(sectionId)
-  if (!target) return
-
-  setActiveSection(sectionId)
-  target.scrollIntoView({
-   behavior: "smooth",
-   block: "start"
-  })
+  setCurrentPage("dashboard")
+  setDashboardTarget(itemId === "dashboard" ? "top" : itemId)
  }
 
  return (
@@ -59,8 +58,25 @@ function App() {
 
    <div className="flex">
 
-    <Sidebar activeSection={activeSection} onNavigate={handleNavigate} />
-    <Dashboard/>
+    <Sidebar activeItem={activeItem} onNavigate={handleNavigate} />
+
+    {currentPage === "charts" ? (
+     <Charts
+      data={data}
+      datasetName={datasetName}
+      uploadError={uploadError}
+     />
+    ) : (
+     <Dashboard
+      data={data}
+      datasetName={datasetName}
+      uploadError={uploadError}
+      isUploading={isUploading}
+      onFileUpload={handleUpload}
+      focusTarget={dashboardTarget}
+      onChartsNavigate={() => handleNavigate("charts")}
+     />
+    )}
 
    </div>
 
