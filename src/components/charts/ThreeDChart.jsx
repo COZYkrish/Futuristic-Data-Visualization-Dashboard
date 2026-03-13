@@ -1,5 +1,5 @@
 import { Canvas, extend, useFrame, useThree } from "@react-three/fiber"
-import { Text } from "@react-three/drei"
+import { Html } from "@react-three/drei"
 import { useEffect, useMemo, useRef } from "react"
 import * as THREE from "three"
 import { OrbitControls as ThreeOrbitControls } from "three/addons/controls/OrbitControls.js"
@@ -100,26 +100,23 @@ function SceneDecorations({ width, depth, height, xLabel, yLabel, maxValue }) {
     <meshStandardMaterial color="#334155" />
    </mesh>
 
-   <Text position={[width / 2 + 0.7, 0.25, -depth / 2]} fontSize={0.26} color="#cbd5e1" anchorX="left">
-    {xLabel}
-   </Text>
-   <Text
-    position={[-width / 2 - 0.45, height + 0.45, -depth / 2]}
-    fontSize={0.26}
-    color="#cbd5e1"
-    rotation={[0, 0, Math.PI / 2]}
-   >
-    {yLabel}
-   </Text>
-   <Text position={[-width / 2 - 0.45, 0.12, -depth / 2]} fontSize={0.18} color="#94a3b8" anchorX="right">
-    0
-   </Text>
-   <Text position={[-width / 2 - 0.45, height / 2, -depth / 2]} fontSize={0.18} color="#94a3b8" anchorX="right">
-    {(maxValue / 2).toFixed(1)}
-   </Text>
-   <Text position={[-width / 2 - 0.45, height, -depth / 2]} fontSize={0.18} color="#94a3b8" anchorX="right">
-    {maxValue.toFixed(1)}
-   </Text>
+   <Html position={[width / 2 + 0.7, 0.25, -depth / 2]} center>
+    <span className="whitespace-nowrap text-xs text-slate-300">{xLabel}</span>
+   </Html>
+   <Html position={[-width / 2 - 0.45, height + 0.45, -depth / 2]} center>
+    <span className="whitespace-nowrap text-xs text-slate-300 [writing-mode:vertical-rl] [text-orientation:mixed]">
+     {yLabel}
+    </span>
+   </Html>
+   <Html position={[-width / 2 - 0.45, 0.12, -depth / 2]} center>
+    <span className="text-[10px] text-slate-400">0</span>
+   </Html>
+   <Html position={[-width / 2 - 0.45, height / 2, -depth / 2]} center>
+    <span className="text-[10px] text-slate-400">{(maxValue / 2).toFixed(1)}</span>
+   </Html>
+   <Html position={[-width / 2 - 0.45, height, -depth / 2]} center>
+    <span className="text-[10px] text-slate-400">{maxValue.toFixed(1)}</span>
+   </Html>
   </>
  )
 }
@@ -187,24 +184,12 @@ export default function ThreeDChart({ data, xKey, yKey }) {
         height={height}
         color={index % 2 === 0 ? "#22d3ee" : "#0ea5e9"}
        />
-       <Text
-        position={[xPosition, -0.15, 0.82]}
-        fontSize={0.17}
-        color="#cbd5e1"
-        rotation={[-Math.PI / 2, 0, 0]}
-        anchorX="center"
-        maxWidth={1}
-       >
-        {bar.label}
-       </Text>
-       <Text
-        position={[xPosition, height + 0.22, 0]}
-        fontSize={0.17}
-        color="#67e8f9"
-        anchorX="center"
-       >
-        {bar.value.toFixed(1)}
-       </Text>
+       <Html position={[xPosition, -0.15, 0.82]} center>
+        <span className="max-w-16 text-center text-[10px] text-slate-300">{bar.label}</span>
+       </Html>
+       <Html position={[xPosition, height + 0.22, 0]} center>
+        <span className="text-[10px] font-medium text-cyan-300">{bar.value.toFixed(1)}</span>
+       </Html>
       </group>
      )
     })}

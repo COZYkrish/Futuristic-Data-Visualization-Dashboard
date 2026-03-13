@@ -1,16 +1,102 @@
-# React + Vite
+# Futuristic Data Visualization Dashboard
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern React dashboard for exploring CSV datasets through interactive 2D/3D charts, animated UI components, and AI-assisted analytics.
 
-Currently, two official plugins are available:
+## Live Demo
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Production deployment: [futuristic-data-visualization-dashb.vercel.app](https://futuristic-data-visualization-dashb.vercel.app)
 
-## React Compiler
+## Key Features
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- CSV upload and parsing workflow
+- Automatic data profiling (rows, columns, missing values)
+- Interactive charting with multiple visualization types:
+  - Bar
+  - Line
+  - Pie
+  - Scatter
+  - Histogram
+  - 3D chart (Three.js / React Three Fiber)
+- Chart controls for axis selection, aggregation, sorting, and Top-N filtering
+- AI analytics panels:
+  - Dataset insights
+  - Correlation heatmap
+  - Outlier detection
+  - Chart recommendations
+- Futuristic UI design with motion and visual effects
 
-## Expanding the ESLint configuration
+## Tech Stack
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- React 19
+- Vite 7
+- Tailwind CSS 4
+- Recharts
+- Three.js + React Three Fiber + Drei
+- Framer Motion
+- Papa Parse
+- ESLint
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js 18+ (recommended latest LTS)
+- npm
+
+### Installation
+
+```bash
+npm install
+```
+
+### Run in Development
+
+```bash
+npm run dev
+```
+
+Then open the local URL shown in the terminal (usually `http://localhost:5173`).
+
+## Available Scripts
+
+- `npm run dev`: Start Vite development server
+- `npm run build`: Create production build
+- `npm run preview`: Preview production build locally
+- `npm run lint`: Run ESLint checks
+
+## Build and Deploy
+
+1. Create a production build:
+
+```bash
+npm run build
+```
+
+2. Deploy the generated `dist/` folder using your preferred hosting platform (Vercel recommended for this project).
+
+## Project Structure
+
+```text
+futuristic-dashboard/
++- public/
++- src/
+|  +- api/
+|  +- assets/
+|  +- components/
+|  |  +- ai/
+|  |  +- charts/
+|  |  +- dashboard/
+|  |  +- layout/
+|  |  +- ui/
+|  |  +- upload/
+|  +- pages/
+|  |  +- Dashboard.jsx
+|  +- styles/
+|  +- utils/
+|  +- App.jsx
+|  +- main.jsx
++- index.html
++- package.json
++- vite.config.js
++- README.md
+```
