@@ -86,6 +86,9 @@ function aggregateChartData(data, xKey, yKey, aggregation, sortMode, topN) {
 export default function Dashboard(){
 
  const [data, setData] = useState([])
+ const [datasetName, setDatasetName] = useState("")
+ const [uploadError, setUploadError] = useState("")
+ const [isUploading, setIsUploading] = useState(false)
  const [chartType, setChartType] = useState("bar")
  const [xKey, setXKey] = useState("")
  const [yKey, setYKey] = useState("")
@@ -94,9 +97,23 @@ export default function Dashboard(){
  const [topN, setTopN] = useState(12)
 
  const handleUpload = (file) => {
-  parseCSV(file, (parsedData) => {
-   setData(parsedData)
-  })
+  setIsUploading(true)
+  setUploadError("")
+
+  parseCSV(
+   file,
+   (parsedData) => {
+    setData(parsedData)
+    setDatasetName(file.name)
+    setIsUploading(false)
+   },
+   (message) => {
+    setData([])
+    setDatasetName("")
+    setUploadError(message)
+    setIsUploading(false)
+   }
+  )
  }
 
  const rows = data.length
@@ -166,7 +183,14 @@ export default function Dashboard(){
 
    {/* Upload Section */}
 
-   <DatasetUpload onFileUpload={handleUpload} />
+   <DatasetUpload
+    onFileUpload={handleUpload}
+    fileName={datasetName}
+    error={uploadError}
+    isUploading={isUploading}
+    rows={rows}
+    columns={columns}
+   />
 
    {/* Stats Section */}
 
