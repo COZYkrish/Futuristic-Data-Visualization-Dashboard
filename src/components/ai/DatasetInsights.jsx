@@ -8,9 +8,9 @@ function formatValue(value) {
 }
 
 export default function DatasetInsights({ data }) {
- if (!data.length) return null
-
  const summary = useMemo(() => {
+  if (!data.length) return null
+
   const profile = buildColumnProfiles(data)
   const rows = data.length
   const columns = profile.columns.length
@@ -50,6 +50,8 @@ export default function DatasetInsights({ data }) {
    strongestSignal
   }
  }, [data])
+
+ if (!summary) return null
 
  return (
   <div className="rounded-xl border border-cyan-400/20 bg-gradient-to-br from-cyan-500/10 via-blue-500/5 to-transparent p-6">

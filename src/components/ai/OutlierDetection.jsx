@@ -14,9 +14,14 @@ function quartile(sortedValues, q) {
 }
 
 export default function OutlierDetection({ data }) {
- if (!data.length) return null
-
  const summary = useMemo(() => {
+  if (!data.length) {
+   return {
+    count: 0,
+    samples: []
+   }
+  }
+
   const profile = buildColumnProfiles(data)
   const flagged = []
 
@@ -46,6 +51,8 @@ export default function OutlierDetection({ data }) {
    samples: flagged.slice(0, 4)
   }
  }, [data])
+
+ if (!data.length) return null
 
  return (
   <div className="rounded-xl border border-red-400/20 bg-gradient-to-br from-red-500/10 via-orange-500/5 to-transparent p-6">

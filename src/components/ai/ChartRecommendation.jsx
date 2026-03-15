@@ -2,9 +2,9 @@ import { useMemo } from "react"
 import { buildColumnProfiles } from "../../utils/dataProfiling"
 
 export default function ChartRecommendation({ data }) {
- if (!data.length) return null
-
  const recommendation = useMemo(() => {
+  if (!data.length) return null
+
   const profile = buildColumnProfiles(data)
 
   const highCardinalityCategorical = profile.categoricalColumns.find(
@@ -41,6 +41,8 @@ export default function ChartRecommendation({ data }) {
    reason: "Numeric structure is limited, so distribution analysis is the safest first step."
   }
  }, [data])
+
+ if (!recommendation) return null
 
  return (
   <div className="rounded-xl border border-fuchsia-400/20 bg-gradient-to-br from-fuchsia-500/10 via-cyan-500/5 to-transparent p-6">

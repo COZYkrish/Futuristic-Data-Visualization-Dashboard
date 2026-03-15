@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react"
+import { useMemo, useState } from "react"
 
 import ChartSelector from "../components/charts/ChartSelector"
 import BarChartComponent from "../components/charts/BarChartComponent"
@@ -26,8 +26,8 @@ function InsightPill({ label, value }) {
 
 export default function Charts({ data, datasetName, uploadError }) {
  const [chartType, setChartType] = useState("bar")
- const [xKey, setXKey] = useState("")
- const [yKey, setYKey] = useState("")
+ const [selectedXKey, setSelectedXKey] = useState("")
+ const [selectedYKey, setSelectedYKey] = useState("")
  const [aggregation, setAggregation] = useState("sum")
  const [sortMode, setSortMode] = useState("desc")
  const [topN, setTopN] = useState(12)
@@ -50,25 +50,20 @@ export default function Charts({ data, datasetName, uploadError }) {
   return numericColumnNames.length ? numericColumnNames : columnNames
  }, [chartType, columnNames, numericColumnNames])
 
- useEffect(() => {
-  if (columnNames.length === 0) {
-   setXKey("")
-   setYKey("")
-   return
-  }
+ const xKey = useMemo(() => {
+  if (!columnNames.length) return ""
+  if (selectedXKey && xOptions.includes(selectedXKey)) return selectedXKey
+  return xOptions[0] ?? ""
+ }, [columnNames.length, selectedXKey, xOptions])
 
-  setXKey((current) => (
-   current && xOptions.includes(current) ? current : xOptions[0]
-  ))
+ const yKey = useMemo(() => {
+  if (chartType === "histogram") return ""
+  if (!columnNames.length) return ""
+  if (selectedYKey && yOptions.includes(selectedYKey)) return selectedYKey
 
-  setYKey((current) => {
-   if (chartType === "histogram") return ""
-   if (current && yOptions.includes(current)) return current
-
-   const fallbackNumeric = yOptions.find((column) => column !== xOptions[0])
-   return fallbackNumeric ?? yOptions[0] ?? ""
-  })
- }, [chartType, columnNames, xOptions, yOptions])
+  const fallbackNumeric = yOptions.find((column) => column !== xKey)
+  return fallbackNumeric ?? yOptions[0] ?? ""
+ }, [chartType, columnNames.length, selectedYKey, xKey, yOptions])
 
  const transformedData = useMemo(() => {
   if (chartType === "bar" || chartType === "line" || chartType === "pie") {
@@ -192,10 +187,10 @@ export default function Charts({ data, datasetName, uploadError }) {
         <span className="text-sm font-medium text-slate-300">
          Category / X Axis
         </span>
-        <select
-         value={xKey}
-         onChange={(event) => setXKey(event.target.value)}
-         className="w-full rounded-2xl border border-white/10 bg-slate-950/80 px-4 py-3 text-sm text-white outline-none transition focus:border-cyan-400"
+         <select
+          value={xKey}
+          onChange={(event) => setSelectedXKey(event.target.value)}
+          className="w-full rounded-2xl border border-white/10 bg-slate-950/80 px-4 py-3 text-sm text-white outline-none transition focus:border-cyan-400"
         >
          {xOptions.map((column) => (
           <option key={column} value={column} className="bg-slate-950">
@@ -212,7 +207,7 @@ export default function Charts({ data, datasetName, uploadError }) {
          </span>
          <select
           value={yKey}
-          onChange={(event) => setYKey(event.target.value)}
+          onChange={(event) => setSelectedYKey(event.target.value)}
           className="w-full rounded-2xl border border-white/10 bg-slate-950/80 px-4 py-3 text-sm text-white outline-none transition focus:border-cyan-400"
          >
           {yOptions.map((column) => (

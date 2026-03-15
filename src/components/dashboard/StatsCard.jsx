@@ -1,4 +1,3 @@
-import { motion } from "framer-motion"
 import CountUp from "react-countup"
 
 export default function StatsCard({ title, value, description, accent = "cyan" }) {
@@ -13,10 +12,7 @@ export default function StatsCard({ title, value, description, accent = "cyan" }
 
  return (
 
-  <motion.div
-   initial={{ opacity: 0, y: 30 }}
-   animate={{ opacity: 1, y: 0 }}
-   transition={{ duration: 0.5 }}
+  <div
    className={`rounded-[24px] border border-white/10 bg-gradient-to-br ${theme} p-6 shadow-[0_0_40px_rgba(15,23,42,0.28)] backdrop-blur-xl transition-all duration-300 hover:-translate-y-1`}
   >
 
@@ -39,7 +35,7 @@ export default function StatsCard({ title, value, description, accent = "cyan" }
     </p>
    )}
 
-  </motion.div>
+  </div>
 
  )
 

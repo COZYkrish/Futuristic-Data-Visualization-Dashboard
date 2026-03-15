@@ -25,9 +25,14 @@ function correlation(x, y) {
 }
 
 export default function CorrelationHeatmap({ data }) {
- if (!data.length) return null
-
  const { numericColumns, matrix } = useMemo(() => {
+  if (!data.length) {
+   return {
+    numericColumns: [],
+    matrix: []
+   }
+  }
+
   const profile = buildColumnProfiles(data)
   const columns = profile.numericColumns.slice(0, 8)
 
@@ -48,6 +53,8 @@ export default function CorrelationHeatmap({ data }) {
    matrix: builtMatrix
   }
  }, [data])
+
+ if (!data.length) return null
 
  if (numericColumns.length < 2) {
   return (

@@ -1,5 +1,3 @@
-import { motion } from "framer-motion"
-
 export default function ChartCard({
  badge,
  title,
@@ -27,10 +25,7 @@ export default function ChartCard({
  const theme = accentStyles[accent] ?? accentStyles.cyan
 
  return (
-  <motion.section
-   initial={{ opacity: 0, y: 24 }}
-   animate={{ opacity: 1, y: 0 }}
-   transition={{ duration: 0.45 }}
+  <section
    className={`rounded-[24px] border ${theme.border} bg-[linear-gradient(135deg,_rgba(15,23,42,0.92),_rgba(2,6,23,0.96))] p-6 ${theme.glow}`}
   >
    <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
@@ -69,6 +64,6 @@ export default function ChartCard({
      {buttonLabel}
     </button>
    </div>
-  </motion.section>
+  </section>
  )
 }
