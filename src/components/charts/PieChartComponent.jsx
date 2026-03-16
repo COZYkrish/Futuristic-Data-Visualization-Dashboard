@@ -27,18 +27,18 @@ function buildPieData(data, categoryKey, valueKey) {
  return Object.values(grouped).filter((entry) => entry.value > 0)
 }
 
-// function renderActiveShape(props) {
-//  const {
-//   cx,
-//   cy,
-//   innerRadius,
-//   outerRadius,
-//   startAngle,
-//   endAngle,
-//   fill,
-//   payload,
-//   percent
-//  } = props
+function renderActiveShape(props) {
+ const {
+  cx,
+  cy,
+  innerRadius,
+  outerRadius,
+  startAngle,
+  endAngle,
+  fill,
+  payload,
+  percent
+ } = props
 
  return (
   <g>
