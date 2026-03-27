@@ -70,10 +70,10 @@ export default function DatasetInsights({ data }) {
     <p>Rows processed: {summary.rows}</p>
     <p>Columns mapped: {summary.columns}</p>
     <p>Numeric signals: {summary.numeric}</p>
-    <p>Categorical dimensions: {summary.categorical}</p>
-    <p>Missing cells: {summary.missingValues}</p>
-    <p>Data quality score: {summary.qualityScore}/100</p>
-   </div> */}
+//     <p>Categorical dimensions: {summary.categorical}</p>
+//     <p>Missing cells: {summary.missingValues}</p>
+//     <p>Data quality score: {summary.qualityScore}/100</p>
+//    </div> */}
 
    {summary.strongestSignal && (
     <p className="mt-4 rounded-lg border border-cyan-400/20 bg-black/20 p-3 text-sm text-cyan-100">
