@@ -1,11 +1,11 @@
-import { useMemo } from "react"
-import { buildColumnProfiles } from "../../utils/dataProfiling"
+// import { useMemo } from "react"
+// import { buildColumnProfiles } from "../../utils/dataProfiling"
 
 export default function ChartRecommendation({ data }) {
  const recommendation = useMemo(() => {
   if (!data.length) return null
 
-  const profile = buildColumnProfiles(data)
+//   const profile = buildColumnProfiles(data)
 
   const highCardinalityCategorical = profile.categoricalColumns.find(
    (column) => profile.profiles[column].distinctCount > 12
