@@ -11,13 +11,13 @@ export default function ChartRecommendation({ data }) {
    (column) => profile.profiles[column].distinctCount > 12
   )
 
-//   if (profile.numericColumns.length >= 2) {
-//    return {
-//     chart: "Scatter Plot + Correlation Heatmap",
-//     confidence: "High",
-//     reason: "Multiple numeric signals were detected, so relationship and clustering patterns are likely meaningful."
-//    }
-//   }
+  if (profile.numericColumns.length >= 2) {
+   return {
+    chart: "Scatter Plot + Correlation Heatmap",
+    confidence: "High",
+    reason: "Multiple numeric signals were detected, so relationship and clustering patterns are likely meaningful."
+   }
+  }
 
   if (highCardinalityCategorical && profile.numericColumns.length >= 1) {
    return {
